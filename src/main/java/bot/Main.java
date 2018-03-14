@@ -2,9 +2,12 @@ package bot;
 
 
 
+import com.pengrad.telegrambot.Callback;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.SendResponse;
 import okhttp3.OkHttpClient;
 
 import java.io.BufferedWriter;
@@ -15,16 +18,33 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        TelegramBot bot = new TelegramBot.Builder("521960020:AAHGQKGlW_QbuedUGikDDcfagOMqbMYguI4").okHttpClient(new OkHttpClient()).build();
+        final TelegramBot bot = new TelegramBot.Builder("521960020:AAHGQKGlW_QbuedUGikDDcfagOMqbMYguI4").okHttpClient(new OkHttpClient()).build();
         bot.setUpdatesListener(new UpdatesListener() {
             public int process(List<Update> list) {
-                for(Update item: list){
+                for(final Update item: list){
                     try
                     {
                         FileWriter writer = new FileWriter("./logs/mainLogFile.txt", true);
                         BufferedWriter bufferWriter = new BufferedWriter(writer);
                         bufferWriter.write("Date: "+item.message().date() +" text:"+item.message().text()+" chat:"+item.message().chat()+"\n");
                         bufferWriter.close();
+                        SendMessage sm = new SendMessage(item.message().chat().id(), item.message().text());
+                        bot.execute(sm, new Callback<SendMessage, SendResponse>() {
+                            public void onResponse(SendMessage sendMessage, SendResponse sendResponse) {
+
+                            }
+
+                            public void onFailure(SendMessage sendMessage, IOException e) {
+                                try {
+                                    FileWriter writer = new FileWriter("./logs/failLoge.txt", true);
+                                    BufferedWriter bufferWriter = new BufferedWriter(writer);
+                                    bufferWriter.write("Date: " + item.message().date() + " text:" + item.message().text() + " chat:" + item.message().chat() + "\n");
+                                    bufferWriter.close();
+                                } catch( Exception ex){
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
                     }
                     catch(IOException ex){
 
