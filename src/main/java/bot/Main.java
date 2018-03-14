@@ -22,7 +22,7 @@ public class Main {
     public static void main(String[] args) {
         final TelegramBot bot = new TelegramBot.Builder("521960020:AAHGQKGlW_QbuedUGikDDcfagOMqbMYguI4").okHttpClient(new OkHttpClient()).build();
         SetWebhook wh = new SetWebhook();
-        wh.url("https://git.heroku.com/cryptic-journey-87140.git");
+        wh.url("https://cryptic-journey-87140.herokuapp.com/ ");
         bot.execute(wh, new Callback<SetWebhook, BaseResponse>() {
             public void onResponse(SetWebhook setWebhook, BaseResponse baseResponse) {
 
