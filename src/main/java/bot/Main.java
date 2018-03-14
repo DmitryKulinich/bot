@@ -7,6 +7,8 @@ import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.request.SetWebhook;
+import com.pengrad.telegrambot.response.BaseResponse;
 import com.pengrad.telegrambot.response.SendResponse;
 import okhttp3.OkHttpClient;
 
@@ -19,6 +21,24 @@ public class Main {
 
     public static void main(String[] args) {
         final TelegramBot bot = new TelegramBot.Builder("521960020:AAHGQKGlW_QbuedUGikDDcfagOMqbMYguI4").okHttpClient(new OkHttpClient()).build();
+        SetWebhook wh = new SetWebhook();
+        wh.url("https://git.heroku.com/cryptic-journey-87140.git");
+        bot.execute(wh, new Callback<SetWebhook, BaseResponse>() {
+            public void onResponse(SetWebhook setWebhook, BaseResponse baseResponse) {
+
+            }
+
+            public void onFailure(SetWebhook setWebhook, IOException e) {
+                try {
+                    FileWriter writer = new FileWriter("./logs/failLoge.txt", true);
+                    BufferedWriter bufferWriter = new BufferedWriter(writer);
+                    bufferWriter.write("fail, while try set webhook");
+                    bufferWriter.close();
+                } catch( Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+        });
         bot.setUpdatesListener(new UpdatesListener() {
             public int process(List<Update> list) {
                 for(final Update item: list){
