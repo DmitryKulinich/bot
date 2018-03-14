@@ -7,6 +7,7 @@ import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
 import okhttp3.OkHttpClient;
 
+import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -20,15 +21,10 @@ public class Main {
                 for(Update item: list){
                     try
                     {
-                        FileWriter writer = new FileWriter("C:\\SomeDir\\notes3.txt", false);
-                        // запись всей строки
-                        String text = "Мама мыла раму, раму мыла мама";
-                        writer.write(text);
-                        // запись по символам
-                        writer.append('\n');
-                        writer.append('E');
-
-                        writer.flush();
+                        FileWriter writer = new FileWriter("./logs/mainLogFile.txt", true);
+                        BufferedWriter bufferWriter = new BufferedWriter(writer);
+                        bufferWriter.write("Date: "+item.message().date() +" text:"+item.message().text()+" chat:"+item.message().chat()+"\n");
+                        bufferWriter.close();
                     }
                     catch(IOException ex){
 
